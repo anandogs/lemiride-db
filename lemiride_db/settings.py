@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-)0cg4l(p658t6(8+8zxb()td+0m5&zuwq(#&w7l0##x7jm!1tr
 DEBUG = True
 
 ALLOWED_HOSTS = ['lemiride-db.herokuapp.com']
+# ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
