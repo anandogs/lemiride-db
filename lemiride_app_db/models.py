@@ -7,9 +7,9 @@ class PartnerInfo(models.Model):
     owner_name = models.CharField('Owner Name',max_length=100)
     mail_id = models.EmailField('Email ID', max_length=100)
     city = models.CharField('City', max_length=100)
-    pincode = models.BigIntegerField('Pincode')
-    whatsapp_number = models.BigIntegerField('Whatsapp Number')
-    account_number = models.BigIntegerField('Account Number')
+    pincode = models.CharField('Pincode', max_length=100)
+    whatsapp_number = models.CharField('Whatsapp Number', max_length=100)
+    account_number = models.CharField('Account Number', max_length=100)
     ifsc_code = models.CharField('IFSC Code', max_length=100)
     upi_id = models.CharField('UPI ID', max_length=100)
 
@@ -43,7 +43,7 @@ class ProductDetails(models.Model):
 
 class CustomerInformation(models.Model):
     customer_name = models.CharField('Customer Name', max_length=100)
-    contact_number = models.BigIntegerField('Mobile Number',  default=0)
+    contact_number = models.CharField('Mobile Number', max_length=100)
     email_id = models.EmailField('Email ID', blank=True)
     driving_license_number = models.CharField('Driving License Number', max_length=100)
     
