@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .models import CustomerInformation
-from .serializers import CustomerInformationSerializer
+from .models import CustomerInformation, Localities
+from .serializers import CustomerInformationSerializer, LocalitiesSerializer
 
 def index(request):
     return HttpResponse("Hello, world. You're at the LemiRideDB index.")
@@ -25,5 +25,13 @@ class CustomerInformationViews(APIView):
 
         items = CustomerInformation.objects.all()
         serializer = CustomerInformationSerializer(items, many=True)
+        return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+
+class LocalitiesViews(APIView):
+
+    def get(self, request, id=None):
+
+        items = Localities.objects.all()
+        serializer = LocalitiesSerializer(items, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 

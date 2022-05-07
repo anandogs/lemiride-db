@@ -1,13 +1,33 @@
 from datetime import datetime
 from django.db import models
 
+class Cities(models.Model):
+    city = models.CharField('City', max_length=100)
+
+    def __str__(self) -> str:
+        return self.city
+
+    class Meta:
+        verbose_name_plural = 'Cities'
+
+
+
+class Localities(models.Model):
+    locality = models.CharField('Locality', max_length=100)
+    city = models.ForeignKey(Cities, on_delete=models.RESTRICT)
+
+    def __str__(self) -> str:
+        return self.locality
+
+    class Meta:
+        verbose_name_plural = 'Localities'
+
 
 class PartnerInfo(models.Model):
     business_name = models.CharField('Business / Entity Name', max_length=100, unique=True)
     owner_name = models.CharField('Owner Name',max_length=100)
     mail_id = models.EmailField('Email ID', max_length=100)
-    city = models.CharField('City', max_length=100)
-    pincode = models.CharField('Pincode', max_length=100)
+    locality = models.ForeignKey(Localities, on_delete=models.RESTRICT)
     whatsapp_number = models.CharField('Whatsapp Number', max_length=100)
     account_number = models.CharField('Account Number', max_length=100)
     ifsc_code = models.CharField('IFSC Code', max_length=100)
@@ -34,6 +54,7 @@ class ProductDetails(models.Model):
     product_category = models.ForeignKey(ProductCategory, on_delete=models.RESTRICT)
     rc_number = models.CharField('Vehicle / RC Number', max_length=100)
     pricing = models.FloatField('Pricing Weekday')
+    partner_info = models.ForeignKey(PartnerInfo, on_delete=models.RESTRICT)
 
     def __str__(self):
         return self.rc_number
@@ -74,4 +95,3 @@ class TransactionDetails(models.Model):
     class Meta:
         verbose_name_plural = "Transaction Details"
     
-
