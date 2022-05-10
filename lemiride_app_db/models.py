@@ -55,6 +55,7 @@ class ProductDetails(models.Model):
     rc_number = models.CharField('Vehicle / RC Number', max_length=100)
     pricing = models.FloatField('Pricing Weekday')
     partner_info = models.ForeignKey(PartnerInfo, on_delete=models.RESTRICT)
+    available_from = models.DateTimeField(default=datetime.now())
 
     def __str__(self):
         return self.rc_number

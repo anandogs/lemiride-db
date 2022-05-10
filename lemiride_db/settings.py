@@ -27,6 +27,8 @@ SECRET_KEY = 'django-insecure-)0cg4l(p658t6(8+8zxb()td+0m5&zuwq(#&w7l0##x7jm!1tr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#! Change this
+
 ALLOWED_HOSTS = ['lemiride-db.herokuapp.com']
 # ALLOWED_HOSTS = []
 
@@ -77,6 +79,8 @@ WSGI_APPLICATION = 'lemiride_db.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+
+#! Change this
 
 # DATABASES = {
 #     'default': {
@@ -132,6 +136,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+#! Change this
 
 # STATIC_URL = 'static/'
 
