@@ -42,7 +42,7 @@ class ProductDetailsViews(APIView):
 
         if location:
             to_convert = f'{day}/{month}/{year} {hour}:{minute}'
-            converted_time = datetime.strptime(to_convert, '%d/%m/%y %H:%M')
+            converted_time = datetime.strptime(to_convert, '%d/%m/%Y %H:%M')
             filtered_date = ProductDetails.objects.filter(available_from__lte = converted_time)
             filtered_loc = filtered_date.filter(partner_info__locality__locality=location)
             
