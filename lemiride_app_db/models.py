@@ -43,6 +43,7 @@ class PartnerInfo(models.Model):
 class ProductCategory(models.Model):
     manufacturer = models.CharField('Manufacturer', max_length=100)
     model = models.CharField('Model', max_length=100)
+    image = models.FileField(upload_to='media/', default='')
 
     def __str__(self):
         return '{} - {}'.format(self.manufacturer, self.model)
