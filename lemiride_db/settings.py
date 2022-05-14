@@ -29,8 +29,8 @@ DEBUG = True
 
 #! Change this
 
-ALLOWED_HOSTS = ['lemiride-db.herokuapp.com']
-# ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['lemiride-db.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [
@@ -82,23 +83,23 @@ WSGI_APPLICATION = 'lemiride_db.wsgi.application'
 
 #! Change this
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'de01it8b6idogh',
-        'USER':'hesitsqbziigeb',
-        'PASSWORD':'    69d4bc4f0e1688047d78212a96b916db1a810ec9e491c547fa12911ca8ff4058',
-        'HOST':'ec2-52-3-200-138.compute-1.amazonaws.com',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME':'de01it8b6idogh',
+#         'USER':'hesitsqbziigeb',
+#         'PASSWORD':'    69d4bc4f0e1688047d78212a96b916db1a810ec9e491c547fa12911ca8ff4058',
+#         'HOST':'ec2-52-3-200-138.compute-1.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
 
 
 
@@ -139,11 +140,11 @@ USE_TZ = True
 
 #! Change this
 
-# STATIC_URL = 'static/'
+STATIC_URL = 'static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
-django_heroku.settings(locals())
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_URL = '/static/'
+# django_heroku.settings(locals())
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -156,3 +157,14 @@ AWS_ACCESS_KEY_ID = os.environ.get('LEMIRIDE_AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('LEMIRIDE_AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'lemiride-db'
 AWS_QUERYSTRING_AUTH = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        #'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        'lemiride_app_db.backends.FirebaseBackend',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
