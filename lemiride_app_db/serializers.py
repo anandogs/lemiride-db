@@ -43,12 +43,6 @@ class ProductCategorySerializer(serializers.ModelSerializer):
 
 
 class ProductDetailsSerializer(serializers.ModelSerializer):
-    product_category = ProductCategorySerializer(read_only=True)
-    rc_number = serializers.CharField(max_length=100)
-    pricing = serializers.FloatField()
-    partner_info = PartnerInfoSerializer(read_only=True)
-    available_from = serializers.DateTimeField()
-
     class Meta:
         model = ProductDetails
         fields = ('__all__')
