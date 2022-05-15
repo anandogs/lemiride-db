@@ -56,7 +56,7 @@ class ProductDetails(models.Model):
     rc_number = models.CharField('Vehicle / RC Number', max_length=100)
     pricing_weekday = models.FloatField('Pricing Weekday', default=0)
     pricing_weekend = models.FloatField('Pricing Weekend', default=0)
-    deposit = models.FloatField('Deposit')
+    deposit = models.FloatField('Deposit', default=0)
     partner_info = models.ForeignKey(PartnerInfo, on_delete=models.RESTRICT)
     available_from = models.DateTimeField(default=datetime.now())
 
