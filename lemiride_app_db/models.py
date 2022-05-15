@@ -54,7 +54,9 @@ class ProductCategory(models.Model):
 class ProductDetails(models.Model):
     product_category = models.ForeignKey(ProductCategory, on_delete=models.RESTRICT)
     rc_number = models.CharField('Vehicle / RC Number', max_length=100)
-    pricing = models.FloatField('Pricing Weekday')
+    pricing_weekday = models.FloatField('Pricing Weekday', default=0)
+    pricing_weekend = models.FloatField('Pricing Weekend', default=0)
+    deposit = models.FloatField('Deposit')
     partner_info = models.ForeignKey(PartnerInfo, on_delete=models.RESTRICT)
     available_from = models.DateTimeField(default=datetime.now())
 
@@ -68,7 +70,7 @@ class CustomerInformation(models.Model):
     customer_name = models.CharField('Customer Name', max_length=100)
     contact_number = models.CharField('Mobile Number', max_length=100)
     email_id = models.EmailField('Email ID', blank=True)
-    driving_license_number = models.CharField('Driving License Number', max_length=100)
+    driving_license_number = models.CharField('Driving License Number', max_length=100, blank=True)
     
 
     def __str__(self):
@@ -78,14 +80,14 @@ class CustomerInformation(models.Model):
         verbose_name_plural = "Customer Information"
 
 class TransactionDetails(models.Model):
-    BOOKING_STATUS = [('completed', 'Payment Completed'), ('picked', 'Picked Up'),  ('returned', 'Returned')]
+    BOOKING_STATUS = [('started', 'Payment Started'), ('completed', 'Payment Completed'), ('picked', 'Picked Up'),  ('returned', 'Returned')]
     payment_type = models.CharField('Payment Type', max_length=100)
     payment_date = models.DateField('Payment Date', default=datetime.now, blank=True)
     payment_reference = models.CharField('Payment Reference', max_length=100)
     booking_date = models.DateField('Booking Date')
     pickup_date = models.DateField('Pick Up Date', blank=True, null=True)
     return_date = models.DateField('Return Date', blank=True, null=True)
-    booking_status = models.CharField('Booking Status', choices=BOOKING_STATUS, default='Payment Complete', max_length=100)
+    booking_status = models.CharField('Booking Status', choices=BOOKING_STATUS, default='Payment Started', max_length=100)
     total_amount = models.FloatField('Total Amount')
     customer_information = models.ForeignKey(CustomerInformation, on_delete=models.RESTRICT)
     product_details = models.ForeignKey(ProductDetails, on_delete=models.RESTRICT)

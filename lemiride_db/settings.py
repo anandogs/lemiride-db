@@ -14,6 +14,8 @@ import os
 import django_heroku
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,13 +27,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-)0cg4l(p658t6(8+8zxb()td+0m5&zuwq(#&w7l0##x7jm!1tr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-#! Change this
-
-# ALLOWED_HOSTS = ['lemiride-db.herokuapp.com']
-ALLOWED_HOSTS = []
-
+if os.environ.get('DJANGO_DEVELOPMENT') is not None:
+    DEBUG = True
+    ALLOWED_HOSTS = []
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+    STATIC_URL = 'static/'
+else:
+    DEBUG = True
+    ALLOWED_HOSTS = ['lemiride-db.herokuapp.com']
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME':'de01it8b6idogh',
+            'USER':'hesitsqbziigeb',
+            'PASSWORD':'    69d4bc4f0e1688047d78212a96b916db1a810ec9e491c547fa12911ca8ff4058',
+            'HOST':'ec2-52-3-200-138.compute-1.amazonaws.com',
+            'PORT': '5432',
+        }
+    }
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATIC_URL = '/static/'
+    django_heroku.settings(locals())
+    
 
 # Application definition
 
@@ -83,23 +106,7 @@ WSGI_APPLICATION = 'lemiride_db.wsgi.application'
 
 #! Change this
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME':'de01it8b6idogh',
-#         'USER':'hesitsqbziigeb',
-#         'PASSWORD':'    69d4bc4f0e1688047d78212a96b916db1a810ec9e491c547fa12911ca8ff4058',
-#         'HOST':'ec2-52-3-200-138.compute-1.amazonaws.com',
-#         'PORT': '5432',
-#     }
-# }
 
 
 
@@ -140,11 +147,7 @@ USE_TZ = True
 
 #! Change this
 
-STATIC_URL = 'static/'
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# STATIC_URL = '/static/'
-# django_heroku.settings(locals())
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
