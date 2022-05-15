@@ -21,14 +21,7 @@ class FirebaseBackend(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed('Authorization credentials not provided')
         decoded_token = None
         try:
-            print('this')
-            print(auth.verify_id_token(id_token))
-
-            print(id_token)
             decoded_token = auth.verify_id_token(id_token)
-            
-            
-            print(decoded_token)
             
         except Exception:
             raise exceptions.AuthenticationFailed('Invalid ID Token')

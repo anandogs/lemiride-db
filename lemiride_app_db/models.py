@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.contrib.auth.models import User
 
 class Cities(models.Model):
     city = models.CharField('City', max_length=100)
@@ -67,10 +68,10 @@ class ProductDetails(models.Model):
         verbose_name_plural = "Product Details"
 
 class CustomerInformation(models.Model):
+    username = models.OneToOneField(User, on_delete=models.CASCADE, default='')
     customer_name = models.CharField('Customer Name', max_length=100)
     contact_number = models.CharField('Mobile Number', max_length=100)
     email_id = models.EmailField('Email ID', blank=True)
-    driving_license_number = models.CharField('Driving License Number', max_length=100, blank=True)
     
 
     def __str__(self):

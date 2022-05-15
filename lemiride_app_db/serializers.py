@@ -6,11 +6,9 @@ class CustomerInformationSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(max_length=100)
     contact_number = serializers.CharField(max_length=100)
     email_id = serializers.EmailField()
-    driving_license_number = serializers.CharField(max_length=100)
-
     class Meta:
         model = CustomerInformation
-        fields = ('__all__')
+        fields = ['customer_name', 'contact_number', 'email_id']
 
 class LocalitiesSerializer(serializers.ModelSerializer):
     locality = serializers.CharField(max_length=100)

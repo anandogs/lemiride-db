@@ -13,27 +13,38 @@ def index(request):
     return HttpResponse("Hello, world. You're at the LemiRideDB index.")
 
 class CustomerInformationViews(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    def post(self, request):
-        serializer = CustomerInformationSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, number):
+        customer, _ = CustomerInformation.objects.get_or_create(
+        username=request.user,
+        contact_number=number,
+        defaults={'customer_name': '', 'email_id':''},
+        )
+        print(customer)
 
-    def get(self, request, id=None):
-        if id:
-            customer = CustomerInformation.objects.get(id=id)
-            serializer = CustomerInformationSerializer(customer)
-            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-
-        items = CustomerInformation.objects.all()
-        serializer = CustomerInformationSerializer(items, many=True)
+        serializer = CustomerInformationSerializer(customer)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
+    # def post(self, request):
+    #     serializer = CustomerInformationSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+    #     else:
+    #         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    # def get(self, request, id=None):
+    #     if id:
+    #         customer = CustomerInformation.objects.get(username=request.user)
+    #         serializer = CustomerInformationSerializer(customer)
+    #         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+
+    #     items = CustomerInformation.objects.all()
+    #     serializer = CustomerInformationSerializer(items, many=True)
+    #     return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+
 class LocalitiesViews(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
     def get(self, request):
 
         items = Localities.objects.all()
@@ -41,7 +52,7 @@ class LocalitiesViews(APIView):
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class ProductDetailsViews(APIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
     def get(self, request, location=None, day=None, month=None, year=None, hour=None, minute=None):
 
         if location:
