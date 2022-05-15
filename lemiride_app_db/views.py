@@ -13,6 +13,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the LemiRideDB index.")
 
 class CustomerInformationViews(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def post(self, request):
         serializer = CustomerInformationSerializer(data=request.data)
         if serializer.is_valid():
@@ -32,7 +33,7 @@ class CustomerInformationViews(APIView):
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class LocalitiesViews(APIView):
-
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request):
 
         items = Localities.objects.all()
@@ -40,8 +41,7 @@ class LocalitiesViews(APIView):
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class ProductDetailsViews(APIView):
-    
-
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     def get(self, request, location=None, day=None, month=None, year=None, hour=None, minute=None):
 
         if location:

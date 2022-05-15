@@ -7,12 +7,15 @@ from firebase_admin import auth,initialize_app
 initialize_app()
 
 class FirebaseBackend(authentication.BaseAuthentication):
+    
     def authenticate(self, request):
-        
-        
+            
         authorization_header = request.META.get("HTTP_AUTHORIZATION")
         if not authorization_header:
-            raise exceptions.AuthenticationFailed('Authorization credentials not provided')
+            #? Not all requests coming in have an authorization header. If the request doesn't have a header than return No User
+            return (None, None)
+
+            # raise exceptions.AuthenticationFailed('Authorization credentials not provided')
         id_token = authorization_header.split(" ").pop()
         if not id_token:
             raise exceptions.AuthenticationFailed('Authorization credentials not provided')
