@@ -82,20 +82,19 @@ class CustomerInformation(models.Model):
 
 class TransactionDetails(models.Model):
     BOOKING_STATUS = [('started', 'Payment Started'), ('completed', 'Payment Completed'), ('picked', 'Picked Up'),  ('returned', 'Returned')]
-    payment_type = models.CharField('Payment Type', max_length=100)
+    payment_type = models.CharField('Payment Type', max_length=100, blank=True)
     payment_date = models.DateField('Payment Date', default=datetime.now, blank=True)
-    payment_reference = models.CharField('Payment Reference', max_length=100)
-    booking_date = models.DateField('Booking Date')
+    payment_reference = models.CharField('Payment Reference', max_length=100, blank=True)
+    booking_date = models.DateField('Booking Date', blank=True, null=True)
     pickup_date = models.DateField('Pick Up Date', blank=True, null=True)
     return_date = models.DateField('Return Date', blank=True, null=True)
     booking_status = models.CharField('Booking Status', choices=BOOKING_STATUS, default='Payment Started', max_length=100)
     total_amount = models.FloatField('Total Amount')
     customer_information = models.ForeignKey(CustomerInformation, on_delete=models.RESTRICT)
     product_details = models.ForeignKey(ProductDetails, on_delete=models.RESTRICT)
-    partner_info = models.ForeignKey(PartnerInfo, on_delete=models.RESTRICT)
-
+    
     def __str__(self):
-        return self.payment_reference
+        return self.booking_status
     
     class Meta:
         verbose_name_plural = "Transaction Details"

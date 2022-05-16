@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CustomerInformationViews, LocalitiesViews, ProductDetailsViews, UserViews
+from .views import CustomerInformationViews, LocalitiesViews, ProductDetailsViews, UserViews, TransactionCreate
 
 from . import views
 
@@ -10,4 +10,5 @@ urlpatterns = [
     path('product-details/', ProductDetailsViews.as_view()),
     path('product-details/<str:location>-<int:day>-<int:month>-<int:year>-<int:hour>-<int:minute>', ProductDetailsViews.as_view()),
     path('user/', UserViews.as_view()),
+    path('transaction-create/', TransactionCreate.as_view()),
 ]

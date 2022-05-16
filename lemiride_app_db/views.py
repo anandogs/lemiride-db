@@ -6,7 +6,7 @@ from rest_framework import permissions
 from django.forms.models import model_to_dict
 
 from .models import CustomerInformation, Localities, ProductDetails
-from .serializers import CustomerInformationSerializer, LocalitiesSerializer, ProductDetailsSerializer
+from .serializers import CustomerInformationSerializer, LocalitiesSerializer, ProductDetailsSerializer, TransactionDetailsSerializer
 from datetime import datetime
 
 def index(request):
@@ -79,3 +79,11 @@ class UserViews(APIView):
             'request.user': model_to_dict(request.user),
             'request.auth': request.auth
         })
+
+class TransactionCreate(APIView):
+    def post(self, request):
+        serializer = TransactionDetailsSerializer(data=request.data)  
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success"}, status=status.HTTP_200_OK)
+        return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,6 @@
 from pyexpat import model
 from rest_framework import serializers
-from .models import CustomerInformation, Localities, PartnerInfo, ProductDetails, ProductCategory
+from .models import CustomerInformation, Localities, PartnerInfo, ProductDetails, ProductCategory, TransactionDetails
 
 class CustomerInformationSerializer(serializers.ModelSerializer):
     customer_name = serializers.CharField(max_length=100)
@@ -8,7 +8,7 @@ class CustomerInformationSerializer(serializers.ModelSerializer):
     email_id = serializers.EmailField()
     class Meta:
         model = CustomerInformation
-        fields = ['customer_name', 'contact_number', 'email_id']
+        fields = ['id', 'customer_name', 'contact_number', 'email_id']
 
 class LocalitiesSerializer(serializers.ModelSerializer):
     locality = serializers.CharField(max_length=100)
@@ -16,7 +16,7 @@ class LocalitiesSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Localities
-        fields = ['locality', 'city']
+        fields = ['id', 'locality', 'city']
     
 class PartnerInfoSerializer(serializers.ModelSerializer):
     business_name = serializers.CharField(max_length=100)
@@ -53,3 +53,15 @@ class ProductDetailsSerializer(serializers.ModelSerializer):
         model = ProductDetails
         fields = ('__all__')
     
+class TransactionDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=TransactionDetails
+        fields=('payment_type','payment_date','payment_reference','booking_date','pickup_date','return_date','booking_status', 'total_amount', 'customer_information', 'product_details')
+
+    def to_representation(self, instance):
+        self.fields['customer_details'] =  CustomerInformationSerializer(read_only=True)
+        return super(CustomerInformationSerializer, self).to_representation(instance)
+
+    def to_representation(self, instance):
+        self.fields['product_details'] =  ProductDetailsSerializer(read_only=True)
+        return super(ProductDetailsSerializer, self).to_representation(instance)
