@@ -1,13 +1,23 @@
+import os
 from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 from django.forms.models import model_to_dict
+import razorpay
+from uritemplate import partial
 
 from .models import CustomerInformation, Localities, ProductDetails
 from .serializers import CustomerInformationSerializer, LocalitiesSerializer, ProductDetailsSerializer, TransactionDetailsSerializer
 from datetime import datetime
+
+
+api_key = os.environ.get('RZP_ID')
+api_secret = os.environ.get('RZP_PWD')
+client = razorpay.Client(auth=(api_key, api_secret))
+
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the LemiRideDB index.")
@@ -25,13 +35,15 @@ class CustomerInformationViews(APIView):
         serializer = CustomerInformationSerializer(customer)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
-    # def post(self, request):
-    #     serializer = CustomerInformationSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-    #     else:
-    #         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        customer_id = request.data['id']
+        customer = CustomerInformation.objects.get(pk=customer_id)
+        serializer = CustomerInformationSerializer(customer, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     # def get(self, request, id=None):
     #     if id:
@@ -81,9 +93,20 @@ class UserViews(APIView):
         })
 
 class TransactionCreate(APIView):
+    '''Creates a transaction and returns transaction with order ID from razorpay - required to complete payment'''
     def post(self, request):
-        serializer = TransactionDetailsSerializer(data=request.data)  
+        serializer = TransactionDetailsSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            amt =float(serializer.validated_data['total_amount']) *100
+            order_id = create_razorpay_order(amt)
+            serializer.save(payment_reference=order_id)
+
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+def create_razorpay_order(amount):
+    DATA = {'amount': amount,'currency': 'INR' }
+    rzp_response = client.order.create(DATA)
+    order_id = rzp_response['id']
+
+    return order_id
