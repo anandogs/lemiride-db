@@ -8,7 +8,7 @@ from django.forms.models import model_to_dict
 import razorpay
 from uritemplate import partial
 
-from .models import CustomerInformation, Localities, ProductDetails
+from .models import CustomerInformation, Localities, ProductDetails, TransactionDetails
 from .serializers import CustomerInformationSerializer, LocalitiesSerializer, ProductDetailsSerializer, TransactionDetailsSerializer
 from datetime import datetime
 
@@ -103,6 +103,19 @@ class TransactionCreate(APIView):
 
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request):
+        transaction_id = request.data['id']
+        transaction = TransactionDetails.objects.get(pk=transaction_id)
+        serializer = TransactionDetailsSerializer(transaction, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 def create_razorpay_order(amount):
     DATA = {'amount': amount,'currency': 'INR' }
