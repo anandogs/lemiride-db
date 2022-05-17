@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework import permissions
 from django.forms.models import model_to_dict
 import razorpay
+from uritemplate import partial
 
 from .models import CustomerInformation, Localities, ProductDetails
 from .serializers import CustomerInformationSerializer, LocalitiesSerializer, ProductDetailsSerializer, TransactionDetailsSerializer
@@ -34,13 +35,15 @@ class CustomerInformationViews(APIView):
         serializer = CustomerInformationSerializer(customer)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
-    # def post(self, request):
-    #     serializer = CustomerInformationSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
-    #     else:
-    #         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request):
+        customer_id = request.data['id']
+        customer = CustomerInformation.objects.get(pk=customer_id)
+        serializer = CustomerInformationSerializer(customer, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     # def get(self, request, id=None):
     #     if id:
@@ -92,7 +95,7 @@ class UserViews(APIView):
 class TransactionCreate(APIView):
     '''Creates a transaction and returns transaction with order ID from razorpay - required to complete payment'''
     def post(self, request):
-        serializer = TransactionDetailsSerializer(data=request.data, partial=True)
+        serializer = TransactionDetailsSerializer(data=request.data)
         if serializer.is_valid():
             amt =float(serializer.validated_data['total_amount']) *100
             order_id = create_razorpay_order(amt)
