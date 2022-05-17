@@ -60,8 +60,8 @@ class TransactionDetailsSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         self.fields['customer_details'] =  CustomerInformationSerializer(read_only=True)
-        return super(CustomerInformationSerializer, self).to_representation(instance)
+        return super().to_representation(instance)
 
     def to_representation(self, instance):
         self.fields['product_details'] =  ProductDetailsSerializer(read_only=True)
-        return super(ProductDetailsSerializer, self).to_representation(instance)
+        return super().to_representation(instance)
