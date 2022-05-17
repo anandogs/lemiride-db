@@ -59,7 +59,7 @@ class TransactionDetailsSerializer(serializers.ModelSerializer):
         fields=('id', 'payment_type','payment_date','payment_reference','booking_date','pickup_date','return_date','booking_status', 'total_amount', 'customer_information', 'product_details')
 
     def to_representation(self, instance):
-        self.fields['customer_details'] =  CustomerInformationSerializer(read_only=True)
+        self.fields['customer_information'] =  CustomerInformationSerializer(read_only=True)
         return super().to_representation(instance)
 
     def to_representation(self, instance):
