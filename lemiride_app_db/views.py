@@ -80,6 +80,18 @@ class ProductDetailsViews(APIView):
         serializer = ProductDetailsSerializer(items, many=True)
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
+    def put(self, request):
+        product_id = request.data['id']
+        product = TransactionDetails.objects.get(pk=product_id)
+        serializer = TransactionDetailsSerializer(product, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        else:
+            return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class UserViews(APIView):
     """ Simple endpoint to test auth """
@@ -94,6 +106,7 @@ class UserViews(APIView):
 
 class TransactionCreate(APIView):
     '''Creates a transaction and returns transaction with order ID from razorpay - required to complete payment'''
+    permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
         serializer = TransactionDetailsSerializer(data=request.data)
         if serializer.is_valid():
