@@ -82,8 +82,8 @@ class ProductDetailsViews(APIView):
 
     def put(self, request):
         product_id = request.data['id']
-        product = TransactionDetails.objects.get(pk=product_id)
-        serializer = TransactionDetailsSerializer(product, data=request.data, partial=True)
+        product = ProductDetails.objects.get(pk=product_id)
+        serializer = ProductDetailsSerializer(product, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
