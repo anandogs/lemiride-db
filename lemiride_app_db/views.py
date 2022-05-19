@@ -64,6 +64,7 @@ class LocalitiesViews(APIView):
         return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
 
 class ProductDetailsViews(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
     def get(self, request, location=None, city=None, day=None, month=None, year=None, hour=None, minute=None):
 
