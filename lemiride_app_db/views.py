@@ -65,13 +65,17 @@ class LocalitiesViews(APIView):
 
 class ProductDetailsViews(APIView):
     
-    def get(self, request, location=None, day=None, month=None, year=None, hour=None, minute=None):
+    def get(self, request, location=None, city=None, day=None, month=None, year=None, hour=None, minute=None):
 
         if location:
             to_convert = f'{day}/{month}/{year} {hour}:{minute}'
             converted_time = datetime.strptime(to_convert, '%d/%m/%Y %H:%M')
             filtered_date = ProductDetails.objects.filter(available_from__lte = converted_time)
-            filtered_loc = filtered_date.filter(partner_info__locality__locality=location)
+            
+            if location == 'All':
+                filtered_loc = filtered_date.filter(partner_info__locality__city__city=city)
+            else:
+                filtered_loc = filtered_date.filter(partner_info__locality__locality=location)
             
             serializer = ProductDetailsSerializer(filtered_loc, many=True)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
